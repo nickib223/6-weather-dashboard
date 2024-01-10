@@ -64,18 +64,17 @@ function displayCurrentWeather(weatherData) {
   const cityName = document.querySelector("#city-name");
   cityName.innerHTML = weatherData.city.name;
 
-  // Assuming you have the weather icon code in weatherData
-  const weatherIcon = weatherData.list[0].weather[0].icon;
-  weatherIcon.src = `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+  const iconCode = weatherData.list[0].weather[0].icon;
+  weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
-  const currentTemperature = weatherData.list[0].main.temp;
-  currentTemp.innerHTML = `${currentTemperature} K`;
+  const currentTemperature = (((weatherData.list[0].main.temp) - 273.15) * 1.8) + 32;
+  currentTemp.innerHTML = `${currentTemperature.toFixed(0)} °F`;
 
   const humidity = weatherData.list[0].main.humidity;
   currentHumidity.innerHTML = `${humidity}%`;
 
   const wind = weatherData.list[0].wind.speed;
-  windSpeed.innerHTML = `${wind} m/s`;
+  windSpeed.innerHTML = `${wind.toFixed(2)} m/s`;
 }
 
 function displayForecast(weatherData) {
