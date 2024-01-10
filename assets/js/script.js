@@ -1,132 +1,91 @@
-let apiKey = "c0e8f5ffdd7879b2071010bce0af1505";
+//variable for api key
+const apiKey = "c0e8f5ffdd7879b2071010bce0af1505";
+//variables for information to be pulled fromt he api
 let userInput = document.querySelector("#user-input")
-let date = document.querySelector("#date")
-let cityName = document.querySelector("#city-name")
-let weatherIcon = document.querySelector("#icon")
-let temp = document.querySelector("#temp")
-let temp1 = document.querySelector("#temp1")
-let temp2 = document.querySelector("#temp2")
-let temp3 = document.querySelector("#temp3")
-let temp4 = document.querySelector("#temp4")
-let temp5 = document.querySelector("#temp5")
-let humidity = document.querySelector("#humidity")
-let humidity1 = document.querySelector("#humidity1")
-let humidity2 = document.querySelector("#humidity2")
-let humidity3 = document.querySelector("#humidity3")
-let humidity4 = document.querySelector("#humidity4")
-let humidity5 = document.querySelector("#humidity5")
+
+
+let weatherIcon = document.querySelector("#weather-icon")
+let currentTemp = document.querySelector("#current-temp")
+let currentHumidity = document.querySelector("#current-humidity")
 let windSpeed = document.querySelector("#wind-speed")
-let windSpeed1 = document.querySelector("#wind-speed1")
-let windSpeed2 = document.querySelector("#wind-speed2")
-let windSpeed3 = document.querySelector("#wind-speed3")
-let windSpeed4 = document.querySelector("#wind-speed4")
-let windSpeed5 = document.querySelector("#wind-speed5")
+//variable for submit button to be used later in the code
 let submitButton = document.querySelector("#submit-button")
-let storageCurrent;
 
+//event listener for submit button to run the searchWeather function and search for the city from the user's input
+submitButton.addEventListener("click", searchWeather);
 
-function currentWeather() {
-  const userInputValue = userInput.value;
+//function for querying the weather of a city provided by the user
+function searchWeather() {
+  //Get the city input value
+  const city = document.getElementById('cityInput').value;
+  // Display current weather information
+  const userInputValue = city
   const geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${userInputValue}&appid=${apiKey}`;
-  
+
+  //fetch location based on user input
   fetch(geoCodeUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
       console.log(data)
+      
       //define variables for latitude and longitude to be used for fetching the weather values
       const geoCodeLat = data[0].lat
       const geoCodeLon = data[0].lon
-      const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${geoCodeLat}&lon=${geoCodeLon}&appid=${apiKey}`;
 
+      //now fetch the weather data using lon and lat
+      const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${geoCodeLat}&lon=${geoCodeLon}&appid=${apiKey}`;
+      
       fetch(weatherUrl)
         .then(function (response) {
           return response.json();
         })
         .then(function (weatherData) {
           console.log(weatherData);
+        displayCurrentWeather(weatherData);  
+        });
 
-          const weatherHeading = document.querySelector("#weather-heading")
-          weatherHeading.innerHTML = "Current Weather"
-          date.innerText = dayjs().format("MMM D, YYYY")
-          let iconCode = weatherData.list[0].weather[0].icon
-          weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`
+//update UI elements
+      const weatherHeading = document.querySelector("#weather-heading")
+      weatherHeading.innerHTML = "Current Weather"
 
-          //current weather: display city name, temp(convert to fahrenheit), humidity, and wind speed for current forecast
-          const weatherHeading2 = document.querySelector("#weather-heading-2");
-          weatherHeading2.innerHTML = "5-Day Forecast"
-          cityName.innerText = data[0].name
+      const todaysDate = document.querySelector("#todays-date")
+      todaysDate.innerText = dayjs().format("MMM D, YYYY")
+      
+    });
 
-          humidity.innerText = weatherData.list[1].main.humidity + "%"
-          humidity1.innerText = weatherData.list[1].main.humidity + "%"
-          humidity2.innerText = weatherData.list[8].main.humidity + "%"
-          humidity3.innerText = weatherData.list[16].main.humidity + "%"
-          humidity4.innerText = weatherData.list[24].main.humidity + "%"
-          humidity5.innerText = weatherData.list[32].main.humidity + "%"
-
-          windSpeed.innerText = weatherData.list[1].wind.speed + "mph"
-          windSpeed1.innerText = weatherData.list[1].wind.speed + "mph"
-          windSpeed2.innerText = weatherData.list[8].wind.speed + "mph"
-          windSpeed3.innerText = weatherData.list[16].wind.speed + "mph"
-          windSpeed4.innerText = weatherData.list[24].wind.speed + "mph"
-          windSpeed5.innerText = weatherData.list[32].wind.speed + "mph"
-
-          let tempfh = (((weatherData.list[1].main.temp) - 273.15) * 1.8) + 32;
-          let temp1fh = (((weatherData.list[1].main.temp) - 273.15) * 1.8) + 32;
-          let temp2fh = (((weatherData.list[8].main.temp) - 273.15) * 1.8) + 32;
-          let temp3fh = (((weatherData.list[16].main.temp) - 273.15) * 1.8) + 32;
-          let temp4fh = (((weatherData.list[24].main.temp) - 273.15) * 1.8) + 32;
-          let temp5fh = (((weatherData.list[32].main.temp) - 273.15) * 1.8) + 32;
-
-          let temptext = tempfh.toFixed(0) + "°F";
-          let temptext1 = temp1fh.toFixed(0) + "°F";
-          let temptext2 = temp2fh.toFixed(0) + "°F";
-          let temptext3 = temp3fh.toFixed(0) + "°F";
-          let temptext4 = temp4fh.toFixed(0) + "°F";
-          let temptext5 = temp5fh.toFixed(0) + "°F";
-
-          temp.innerText = temptext;
-          temp1.innerText = temptext1;
-          temp2.innerText = temptext2;
-          temp3.innerText = temptext3;
-          temp4.innerText = temptext4;
-          temp5.innerText = temptext5;
-
-          storageCurrent = {
-            city: data[0].name,
-            temp: temptext,
-            humidity: weatherData.list[1].main.humidity + "%",
-            wind: weatherData.list[1].wind.speed + "mph",
-            icon: weatherData.list[0].weather[0].icon
-          };
-
-          localStorage.setItem("Current", JSON.stringify(storageCurrent))
- 
-        })
-    })
-  
 }
 
-function renderStorage() {
-let getCurrent = localStorage.getItem("Current")
-if (getCurrent) {
-  let parseCurrent = JSON.parse(getCurrent);
+function displayCurrentWeather(weatherData) {
+  console.log(weatherData);
 
-  // Now you can use parseCurrent to update the UI or any other display elements
-  // Example: Update the UI with the stored city name
-  document.querySelector("#stored-city-name").innerText = parseCurrent.city;
-  
-  // Add similar lines to update other UI elements with the stored data
+  // Update UI elements with weather information
+  const cityName = document.querySelector("#city-name");
+  cityName.innerHTML = weatherData.city.name;
 
-  console.log(parseCurrent);
+  // Assuming you have the weather icon code in weatherData
+  const weatherIcon = weatherData.list[0].weather[0].icon;
+  weatherIcon.src = `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+
+  const currentTemperature = weatherData.list[0].main.temp;
+  currentTemp.innerHTML = `${currentTemperature} K`;
+
+  const humidity = weatherData.list[0].main.humidity;
+  currentHumidity.innerHTML = `${humidity}%`;
+
+  const wind = weatherData.list[0].wind.speed;
+  windSpeed.innerHTML = `${wind} m/s`;
 }
-//document.queryselector to display on the other side of the page
+
+function displayForecast(weatherData) {
+  // Display 5-day forecast
 }
 
-submitButton.addEventListener("click", currentWeather);
+function displaySearchHistory(history) {
+  // Display search history
+}
 
-window.addEventListener('load', renderStorage);
 
 
 // GIVEN a weather dashboard with form inputs
