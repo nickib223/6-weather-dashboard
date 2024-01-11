@@ -1,0 +1,1 @@
+I recieved assistance from Tom Gold, TA, Ashton Foston, tutor, MDN, W3 Schools, geeksforgeeks.org, bootstrap docs, and jquery docs in production of this application.

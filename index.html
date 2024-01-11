@@ -19,7 +19,7 @@
         <button id="submit-button" type="button">Search</button>
     </form>
 
-    <div id="">
+    <div id="current-weather-content">
         <!-- current weather information -->
         <h2 id="weather-heading"></h2>
         <h3 id="city-name"></h3>
@@ -27,16 +27,27 @@
         <p id="current-temp"></p>
         <p id="current-humidity"></p>
         <p id="wind-speed"></p>
-        
-    </div>
 
-    <div id="forecast-container">
-        <div class="forecast-day">
+    </div>
+    <div id="current-forecast-content">
+        <div id="forecast-container">
+            <div class="forecast-day"></div>
         </div>
     </div>
-    <div id="searchHistory">
-        <!-- Display search history here -->
+    <div>
+        <!-- current weather information -->
+        <h2 id="clicked-weather-heading"></h2>
+        <h3 id="clicked-city-name"></h3>
+        <img id="clicked-weather-icon"></img>
+        <p id="clicked-current-temp"></p>
+        <p id="clicked-current-humidity"></p>
+        <p id="clicked-wind-speed"></p>
     </div>
+    <div id="clicked-forecast-container">
+        <div class="clicked-forecast-day">
+        </div>
+    </div>
+    <div id="search-history-container"></div>
 
     <script src="./assets/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
