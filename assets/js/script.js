@@ -1,50 +1,46 @@
 //variable for api key
 const apiKey = "c0e8f5ffdd7879b2071010bce0af1505";
-//variables for information to be pulled fromt he api
-let userInput = document.querySelector("#user-input")
-
-
-let weatherIcon = document.querySelector("#weather-icon")
-let currentTemp = document.querySelector("#current-temp")
-let currentHumidity = document.querySelector("#current-humidity")
-let windSpeed = document.querySelector("#wind-speed")
+//variables for information to be pulled from the api
+const userInput = document.querySelector("#user-input");
+const weatherIcon = document.querySelector("#weather-icon");
+const currentTemp = document.querySelector("#current-temp");
+const currentHumidity = document.querySelector("#current-humidity");
+const windSpeed = document.querySelector("#wind-speed");
 //variable for submit button to be used later in the code
-let submitButton = document.querySelector("#submit-button")
-//variable to store search history, parse, and create an array
-let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+const submitButton = document.querySelector("#submit-button");
+//variable to store search history, parse, and create an empty array to be used later
+const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
 //event listener for submit button to run the searchWeather function and search for the city from the user's input
 submitButton.addEventListener("click", searchWeather);
 
 //function for querying the weather of a city provided by the user
 function searchWeather() {
-  //Get the city input value
   const city = document.getElementById('cityInput').value;
-  // Display current weather information
-  const userInputValue = city
+  const userInputValue = city;
   const geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${userInputValue}&appid=${apiKey}`;
 
-  //fetch location based on user input
+  //fetches from api the location based on user input
   fetch(geoCodeUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data)
+      console.log(data);
 
-      //define variables for latitude and longitude to be used for fetching the weather values
-      const geoCodeLat = data[0].lat
-      const geoCodeLon = data[0].lon
-
-      //now fetch the weather data using lon and lat
+      //defines variables for latitude and longitude to be used for fetching the weather values
+      const geoCodeLat = data[0].lat;
+      const geoCodeLon = data[0].lon;
       const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${geoCodeLat}&lon=${geoCodeLon}&appid=${apiKey}`;
-
+      
+      //now fetches the weather data
       fetch(weatherUrl)
         .then(function (response) {
           return response.json();
         })
         .then(function (weatherData) {
-          updateSearchHistory(userInputValue);
+          //adds searched city to the history and stores to local storage
+          updateSearchHistory(userInputValue); 
           localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 
           //Runs displayCurrentWeather function with weatherData passed through the function
@@ -52,19 +48,18 @@ function searchWeather() {
         });
 
       //adds heading and date to query
-      const weatherHeading = document.querySelector("#weather-heading")
-      weatherHeading.innerHTML = "Current Weather"
-
-      const todaysDate = document.querySelector("#todays-date")
-      todaysDate.innerText = dayjs().format("MMM D, YYYY")
+      const weatherHeading = document.querySelector("#weather-heading");
+      const todaysDate = document.querySelector("#todays-date");
+      
+      weatherHeading.innerHTML = "Current Weather";
+      todaysDate.innerText = dayjs().format("MMM D, YYYY");
     });
-
 }
 
+//function to display the current weather data
 function displayCurrentWeather(weatherData) {
   console.log(weatherData);
-
-  // Update UI elements with weather information
+  //adds city name, icon, temp, wind and humidity to the page then calls the forecast function
   const cityName = document.querySelector("#city-name");
   cityName.innerHTML = weatherData.city.name;
 
@@ -80,30 +75,25 @@ function displayCurrentWeather(weatherData) {
   const humidity = weatherData.list[0].main.humidity;
   currentHumidity.innerHTML = `Humidity: ${humidity}%`;
 
-
-
   displayForecast(weatherData);
 }
 
 // function to display the 5-day forecast
 function displayForecast(weatherData) {
-  //variable to link to HTML tag
-  const forecastContainer = document.querySelector("#forecast-container");
-
-  // Clears existing content in the forecast container
-  forecastContainer.innerHTML = "";
-
   //Variable to identify which array items are to be pulled from
   const forecastIndices = [1, 8, 16, 24, 32];
+  const forecastContainer = document.querySelector("#forecast-container"); //variable to link to HTML tag
+  
+  forecastContainer.innerHTML = ""; // Clears existing content in the forecast container
+
   //Pulls data for each of the array items identified in the array above
   forecastIndices.forEach(index => {
     const dayData = weatherData.list[index];
 
-    // Creates HTML elements for each day
     const dayContainer = document.createElement("div");
     dayContainer.classList.add("forecast-day");
 
-    // Displays date for each day and appends to the <p> tag that was created
+    // Displays date for each day and appends to the <h5> tag that was created
     const dateElement = document.createElement("h5");
     dateElement.innerText = dayjs(dayData.dt_txt).format("MMM D, YYYY");
     dayContainer.appendChild(dateElement);
@@ -220,9 +210,7 @@ function searchWeatherForCity(city) {
     })
     .catch(function (error) {
       console.error("Error fetching location data:", error);
-    });
-
-    
+    }); 
 }
 
 //function to display the current weather for the clicked city
