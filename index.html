@@ -12,42 +12,44 @@
 </head>
 
 <body>
-    <form id="searchForm">
+    <form id="searchForm" class="text-center">
         <h1>Weather Dashboard</h1>
         <h2 id="todays-date"></h2>
         <input type="text" id="cityInput" placeholder="Enter City">
         <button id="submit-button" type="button">Search</button>
     </form>
 
-    <div id="current-weather-content">
+    <div id="current-weather-content" class="container my-5 text-center">
         <!-- current weather information -->
-        <h2 id="weather-heading"></h2>
-        <h3 id="city-name"></h3>
-        <img id="weather-icon"></img>
-        <p id="current-temp"></p>
-        <p id="current-humidity"></p>
-        <p id="wind-speed"></p>
-
+        <div class="">
+            <h2 id="weather-heading"></h2>
+            <h3 id="city-name"></h3>
+            <img id="weather-icon"></img>
+            <p id="current-temp" class="fs-5"></p>
+            <p id="current-humidity" class="fs-5"></p>
+            <p id="wind-speed" class="fs-5"></p>
+        </div>
+            
     </div>
     <div id="current-forecast-content">
-        <div id="forecast-container">
-            <div class="forecast-day"></div>
+        <div id="forecast-container" class="container d-flex justify-content-center">
+            <div class="forecast-day fs-5"></div>
         </div>
     </div>
-    <div>
+    <div class="container my-5 text-center">
         <!-- current weather information -->
         <h2 id="clicked-weather-heading"></h2>
         <h3 id="clicked-city-name"></h3>
         <img id="clicked-weather-icon"></img>
-        <p id="clicked-current-temp"></p>
-        <p id="clicked-current-humidity"></p>
-        <p id="clicked-wind-speed"></p>
+        <p id="clicked-current-temp" class="fs-5"></p>
+        <p id="clicked-current-humidity" class="fs-5"></p>
+        <p id="clicked-wind-speed" class="fs-5"></p>
     </div>
-    <div id="clicked-forecast-container">
+    <div id="clicked-forecast-container" class="container d-flex justify-content-center">
         <div class="clicked-forecast-day">
         </div>
     </div>
-    <div id="search-history-container"></div>
+    <div id="search-history-container" class="container text-start no-bullets"></div>
 
     <script src="./assets/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
